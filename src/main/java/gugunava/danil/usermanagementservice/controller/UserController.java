@@ -24,7 +24,6 @@ public interface UserController {
     /**
      * GET /users : List of all users in the system
      *
-     * @param limit (optional)
      * @return successful operation (status code 200)
      * or invalid limit (status code 400)
      */
@@ -42,7 +41,7 @@ public interface UserController {
             }
     )
     @GetMapping
-    ResponseEntity<List<User>> getUsers(@Parameter(name = "limit", description = "", in = ParameterIn.QUERY) @RequestParam(value = "limit", required = false) Integer limit);
+    ResponseEntity<List<User>> getUsers();
 
     /**
      * GET /users/{id} : Returns details of a specific user by their ID
@@ -77,7 +76,7 @@ public interface UserController {
     /**
      * POST /users : Create new user
      *
-     * @param createUserCommand Information about user to be created (optional)
+     * @param command Information about user to be created (optional)
      * @return successful operation (status code 200)
      */
     @Operation(
@@ -94,13 +93,13 @@ public interface UserController {
             }
     )
     @PostMapping
-    ResponseEntity<User> createUser(@Parameter(name = "CreateUserCommand", description = "Information about user to be created") @Valid @RequestBody CreateUserCommand createUserCommand);
+    ResponseEntity<User> createUser(@Parameter(name = "CreateUserCommand", description = "Information about user to be created") @Valid @RequestBody CreateUserCommand command);
 
     /**
      * PUT /users/{id} : Updates the details of a specific user
      *
-     * @param id                (required)
-     * @param updateUserCommand Information about user to be updated (optional)
+     * @param id      (required)
+     * @param command Information about user to be updated (optional)
      * @return successful operation (status code 200)
      * or invalid input (status code 400)
      * or user not found (status code 404)
@@ -127,7 +126,7 @@ public interface UserController {
     @PutMapping("{id}")
     ResponseEntity<User> updateUser(
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id,
-            @Parameter(name = "UpdateUserCommand", description = "Information about user to be updated") @Valid @RequestBody UpdateUserCommand updateUserCommand
+            @Parameter(name = "UpdateUserCommand", description = "Information about user to be updated") @Valid @RequestBody UpdateUserCommand command
     );
 
     /**
@@ -143,7 +142,7 @@ public interface UserController {
             tags = {"user"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+                            @Content(mediaType = "application/json", schema = @Schema())
                     }),
                     @ApiResponse(responseCode = "404", description = "user not found", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
@@ -154,5 +153,5 @@ public interface UserController {
             }
     )
     @DeleteMapping("{id}")
-    ResponseEntity<User> deleteUser(@Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id);
+    ResponseEntity<Void> deleteUser(@Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id);
 }

@@ -5,6 +5,7 @@ import gugunava.danil.usermanagementservice.model.UpdateUserCommand;
 import gugunava.danil.usermanagementservice.model.User;
 import gugunava.danil.usermanagementservice.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,27 +18,32 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<List<User>> getUsers(Integer limit) {
-        return null;
+    public ResponseEntity<List<User>> getUsers() {
+        List<User> users = userService.getUsers();
+        return ResponseEntity.ok(users);
     }
 
     @Override
     public ResponseEntity<User> getUser(Long id) {
-        return null;
+        User user = userService.getUser(id);
+        return ResponseEntity.ok(user);
     }
 
     @Override
-    public ResponseEntity<User> createUser(CreateUserCommand createUserCommand) {
-        return null;
+    public ResponseEntity<User> createUser(CreateUserCommand command) {
+        User user = userService.createUser(command);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @Override
-    public ResponseEntity<User> updateUser(Long id, UpdateUserCommand updateUserCommand) {
-        return null;
+    public ResponseEntity<User> updateUser(Long id, UpdateUserCommand command) {
+        User user = userService.updateUser(id, command);
+        return ResponseEntity.ok(user);
     }
 
     @Override
-    public ResponseEntity<User> deleteUser(Long id) {
-        return null;
+    public ResponseEntity<Void> deleteUser(Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -11,5 +11,7 @@ public class UpdateUserCommand {
 
     @Email
     String email;
+
+    String password;
 }
 
