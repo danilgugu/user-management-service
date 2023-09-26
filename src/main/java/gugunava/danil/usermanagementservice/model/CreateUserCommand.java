@@ -8,14 +8,14 @@ import javax.validation.constraints.NotBlank;
 @Value
 public class CreateUserCommand {
 
-  @NotBlank
-  String userName;
+    @NotBlank
+    String userName;
 
-  @Email
-  @NotBlank
-  String email;
+    @Email
+    @NotBlank
+    String email;
 
-  @NotBlank
-  String password;
+    @NotBlank
+    String password;
 }
 

@@ -7,6 +7,6 @@ public class UserAlreadyExistsException extends RuntimeException {
     }
 
     public static UserAlreadyExistsException withEmail(String email) {
-        return new UserAlreadyExistsException("User with email '" + email + "' already registered.");
+        return new UserAlreadyExistsException(String.format("User with email '%s' already registered.", email));
     }
 }
