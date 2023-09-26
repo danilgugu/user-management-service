@@ -30,7 +30,7 @@ public class UserController_GetUsers_Test extends AbstractUserControllerTest {
                 .andExpect(jsonPath("$[1].id", is(usersInDB.get(1).getId())))
                 .andExpect(jsonPath("$[1].userName", is(usersInDB.get(1).getUserName())))
                 .andExpect(jsonPath("$[1].email", is(usersInDB.get(1).getEmail())))
-                .andExpect(jsonPath("$[0].password").doesNotExist());
+                .andExpect(jsonPath("$[1].password").doesNotExist());
 
         verify(userRepository).findAll();
     }
