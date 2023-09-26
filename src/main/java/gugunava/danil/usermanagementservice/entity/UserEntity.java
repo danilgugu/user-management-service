@@ -38,4 +38,13 @@ public class UserEntity {
     ) {
         return new UserEntity(null, userName, email, password);
     }
+
+    public static UserEntity buildExisting(
+            long id,
+            String userName,
+            String email,
+            String password
+    ) {
+        return new UserEntity(id, userName, email, password);
+    }
 }
