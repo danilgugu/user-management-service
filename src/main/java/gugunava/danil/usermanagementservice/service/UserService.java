@@ -1,6 +1,7 @@
 package gugunava.danil.usermanagementservice.service;
 
 import gugunava.danil.usermanagementservice.entity.UserEntity;
+import gugunava.danil.usermanagementservice.exception.UserAlreadyExistsException;
 import gugunava.danil.usermanagementservice.exception.UserNotFoundException;
 import gugunava.danil.usermanagementservice.model.CreateUserCommand;
 import gugunava.danil.usermanagementservice.model.UpdateUserCommand;
@@ -36,7 +37,10 @@ public class UserService {
                 .orElseThrow(() -> UserNotFoundException.byId(id));
     }
 
+    @Transactional
     public User createUser(CreateUserCommand command) {
+        if (userRepository.existsByEmail(command.getEmail()))
+            throw UserAlreadyExistsException.withEmail(command.getEmail());
         String password = passwordEncoder.encode(command.getPassword());
         UserEntity userEntity = UserEntity.createNew(command.getUserName(), command.getEmail(), password);
         UserEntity saved = userRepository.save(userEntity);

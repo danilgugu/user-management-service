@@ -1,12 +1,18 @@
 package gugunava.danil.usermanagementservice.model;
 
-import lombok.Value;
+import lombok.Getter;
 
-@Value
+import java.time.Instant;
+
+@Getter
 public class ErrorDto {
 
-    String message;
+    private final String message;
 
-    String time;
+    private final Instant time;
+
+    public ErrorDto(String message) {
+        this.message = message;
+        this.time = Instant.now();
+    }
 }
-
