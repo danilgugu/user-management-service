@@ -5,7 +5,6 @@ import gugunava.danil.usermanagementservice.generator.UpdateUserCommandGenerator
 import gugunava.danil.usermanagementservice.generator.UserEntityGenerator;
 import gugunava.danil.usermanagementservice.model.UpdateUserCommand;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -36,13 +35,13 @@ public class UserController_UpdateUser_Test extends AbstractUserControllerTest {
         long userId = expected.getId();
         given(userRepository.findById(userId)).willReturn(Optional.of(expected));
         given(userRepository.existsByEmail(command.getEmail())).willReturn(false);
-        given(userRepository.save(any())).willAnswer(Answers.RETURNS_SELF);
+        given(userRepository.save(any())).willAnswer(i -> i.getArguments()[0]);
 
         mockMvc.perform(put(BASE_URL + userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userId)))
+                .andExpect(jsonPath("$.id", is(((int) userId))))
                 .andExpect(jsonPath("$.userName", is(command.getUserName())))
                 .andExpect(jsonPath("$.email", is(command.getEmail())))
                 .andExpect(jsonPath("$.password").doesNotExist());
@@ -69,7 +68,7 @@ public class UserController_UpdateUser_Test extends AbstractUserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userId)))
+                .andExpect(jsonPath("$.id", is(((int) userId))))
                 .andExpect(jsonPath("$.userName", is(command.getUserName())))
                 .andExpect(jsonPath("$.email", is(command.getEmail())))
                 .andExpect(jsonPath("$.password").doesNotExist());
@@ -110,9 +109,9 @@ public class UserController_UpdateUser_Test extends AbstractUserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userId)))
-                .andExpect(jsonPath("$.userName", is(command.getUserName())))
-                .andExpect(jsonPath("$.email", is(command.getEmail())))
+                .andExpect(jsonPath("$.id", is(((int) userId))))
+                .andExpect(jsonPath("$.userName", is(expected.getUserName())))
+                .andExpect(jsonPath("$.email", is(expected.getEmail())))
                 .andExpect(jsonPath("$.password").doesNotExist());
 
         verify(userRepository).findById(userId);

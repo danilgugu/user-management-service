@@ -37,7 +37,7 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(command)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(expected.getId())))
+                .andExpect(jsonPath("$.id", is(expected.getId().intValue())))
                 .andExpect(jsonPath("$.userName", is(expected.getUserName())))
                 .andExpect(jsonPath("$.email", is(expected.getEmail())))
                 .andExpect(jsonPath("$.password").doesNotExist());

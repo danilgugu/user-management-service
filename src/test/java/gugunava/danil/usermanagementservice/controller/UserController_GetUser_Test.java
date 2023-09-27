@@ -24,7 +24,7 @@ public class UserController_GetUser_Test extends AbstractUserControllerTest {
 
         mockMvc.perform(get(BASE_URL + userId))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(userInDB.getId())))
+                .andExpect(jsonPath("$.id", is(userInDB.getId().intValue())))
                 .andExpect(jsonPath("$.userName", is(userInDB.getUserName())))
                 .andExpect(jsonPath("$.email", is(userInDB.getEmail())))
                 .andExpect(jsonPath("$.password").doesNotExist());

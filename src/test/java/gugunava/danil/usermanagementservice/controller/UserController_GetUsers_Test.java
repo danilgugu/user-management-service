@@ -23,11 +23,11 @@ public class UserController_GetUsers_Test extends AbstractUserControllerTest {
 
         mockMvc.perform(get(BASE_URL))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(usersInDB.get(0).getId())))
+                .andExpect(jsonPath("$[0].id", is(usersInDB.get(0).getId().intValue())))
                 .andExpect(jsonPath("$[0].userName", is(usersInDB.get(0).getUserName())))
                 .andExpect(jsonPath("$[0].email", is(usersInDB.get(0).getEmail())))
                 .andExpect(jsonPath("$[0].password").doesNotExist())
-                .andExpect(jsonPath("$[1].id", is(usersInDB.get(1).getId())))
+                .andExpect(jsonPath("$[1].id", is(usersInDB.get(1).getId().intValue())))
                 .andExpect(jsonPath("$[1].userName", is(usersInDB.get(1).getUserName())))
                 .andExpect(jsonPath("$[1].email", is(usersInDB.get(1).getEmail())))
                 .andExpect(jsonPath("$[1].password").doesNotExist());
