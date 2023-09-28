@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "_user")
@@ -15,20 +13,20 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserEntity {
+public class UserEntity extends EmailAsLoginUserDetails {
 
     @Id
-    @NotNull
+    @Column(nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_gen")
     Long id;
 
-    @NotBlank
+    @Column(nullable = false)
     String userName;
 
-    @NotBlank
+    @Column(nullable = false, unique = true)
     String email;
 
-    @NotBlank
+    @Column(nullable = false, length = 64)
     String password;
 
     public static UserEntity createNew(
