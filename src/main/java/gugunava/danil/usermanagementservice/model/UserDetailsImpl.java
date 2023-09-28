@@ -1,23 +1,19 @@
-package gugunava.danil.usermanagementservice.entity;
+package gugunava.danil.usermanagementservice.model;
 
+import lombok.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
+import java.util.List;
 
-public abstract class EmailAsLoginUserDetails implements UserDetails {
+@Value
+public class UserDetailsImpl implements UserDetails {
 
-    public abstract String getEmail();
+    String username;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
+    String password;
 
-    @Override
-    public String getUsername() {
-        return getEmail();
-    }
+    List<? extends GrantedAuthority> authorities;
 
     @Override
     public boolean isAccountNonExpired() {

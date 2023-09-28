@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -150,5 +151,6 @@ public interface UserController {
             }
     )
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('SCOPE_USER.DELETE')")
     ResponseEntity<Void> deleteUser(@Parameter(name = "id", description = "Identifier of desired user", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id);
 }

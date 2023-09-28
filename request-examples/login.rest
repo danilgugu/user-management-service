@@ -1,7 +1,21 @@
+###
+# login as user
+
 POST http://localhost:8080/api/login
 Content-Type: application/json
 
 {
   "email": "example@mail.com",
+  "password": "pass"
+}
+
+###
+# login as admin
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "admin@mail.com",
   "password": "pass"
 }

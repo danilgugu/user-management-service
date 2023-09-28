@@ -1,5 +1,6 @@
 package gugunava.danil.usermanagementservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserEntity extends EmailAsLoginUserDetails {
+public class UserEntity {
 
     @Id
     @Column(nullable = false)
@@ -26,6 +27,7 @@ public class UserEntity extends EmailAsLoginUserDetails {
     @Column(nullable = false, unique = true)
     String email;
 
+    @JsonIgnore
     @Column(nullable = false, length = 64)
     String password;
 
