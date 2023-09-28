@@ -121,7 +121,7 @@ public class UserController_UpdateUser_Test extends AbstractUserControllerTest {
 
     @Test
     void whenUserIsNotRegistered_thenStatusNotFound_andReturnErrorMessage() throws Exception {
-        UpdateUserCommand command = UpdateUserCommandGenerator.empty();
+        UpdateUserCommand command = UpdateUserCommandGenerator.valid();
         long userId = 1L;
         given(userRepository.findById(userId)).willReturn(Optional.empty());
 

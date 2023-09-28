@@ -11,6 +11,15 @@ public class UserEntityGenerator {
                 1L,
                 "Nick Fisher",
                 "example@mail.com",
+                "$2a$10$f..K.egFrctTsuDG8LMTQ.5NihkDVpvwtJLjNKvrI91IeUTek/LL2"
+        );
+    }
+
+    public static UserEntity validWithRawPassword() {
+        return UserEntity.buildExisting(
+                1L,
+                "Nick Fisher",
+                "example@mail.com",
                 "pass"
         );
     }
@@ -20,7 +29,7 @@ public class UserEntityGenerator {
                 2L,
                 "Brad Greedy",
                 "some.other@mail.com",
-                "fizzbuzz"
+                "$2a$10$/iS1ifiyTHY7OKW4tg5jy.5XTM1hvbdhXMa2zcF1H9kByUvn26Z/6"
         );
     }
 

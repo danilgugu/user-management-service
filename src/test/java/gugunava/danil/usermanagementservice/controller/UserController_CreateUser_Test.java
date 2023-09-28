@@ -29,7 +29,7 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
     @Test
     void whenUserIsNotRegistered_thenStatusCreated_andReturnUser() throws Exception {
         CreateUserCommand command = CreateUserCommandGenerator.valid();
-        UserEntity expected = UserEntityGenerator.valid();
+        UserEntity expected = UserEntityGenerator.validWithRawPassword();
         given(userRepository.existsByEmail(command.getEmail())).willReturn(false);
         given(userRepository.save(any())).willReturn(expected);
 
