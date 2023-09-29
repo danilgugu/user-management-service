@@ -12,6 +12,7 @@ import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 public class UserService_GetUser_Test extends AbstractUserServiceTest {
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void whenUserNotExists_thenThrowException() {
         ThrowableAssert.ThrowingCallable getUser = () -> userService.getUser(-1L);
 
@@ -21,6 +22,7 @@ public class UserService_GetUser_Test extends AbstractUserServiceTest {
     }
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenUserExists_thenReturnUser() {

@@ -1,5 +1,6 @@
 package gugunava.danil.usermanagementservice.controller;
 
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
     @Test
+    @WithMockJwtAuth(authorities = "SCOPE_USER.DELETE")
     void whenUserExists_thenStatusSuccess_andReturnEmptyBody() throws Exception {
         long userId = 1L;
         given(userRepository.existsById(userId)).willReturn(true);
@@ -26,6 +28,7 @@ public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
     }
 
     @Test
+    @WithMockJwtAuth(authorities = "SCOPE_USER.DELETE")
     void whenUserNotExists_thenStatusSuccess_andReturnEmptyBody() throws Exception {
         long userId = 1L;
         given(userRepository.existsById(userId)).willReturn(false);

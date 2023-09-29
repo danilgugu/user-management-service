@@ -21,6 +21,7 @@ public class UserService_UpdateUser_Test extends AbstractUserServiceTest {
     private BCryptPasswordEncoder encoder;
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenUserIsRegistered_andEmailIsAvailable_thenReturnUpdatedUser() {
@@ -38,6 +39,7 @@ public class UserService_UpdateUser_Test extends AbstractUserServiceTest {
     }
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenEmailIsUnavailable_thenThrowException() {
@@ -52,6 +54,7 @@ public class UserService_UpdateUser_Test extends AbstractUserServiceTest {
     }
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenUpdateIsNotNeeded_thenReturnSameUser() {
@@ -69,6 +72,7 @@ public class UserService_UpdateUser_Test extends AbstractUserServiceTest {
     }
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenUpdateIsEmpty_thenReturnSameUser() {

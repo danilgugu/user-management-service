@@ -11,12 +11,14 @@ import static org.assertj.core.api.BDDAssertions.then;
 public class UserService_GetUsers_Test extends AbstractUserServiceTest {
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     void whenTableIsEmpty_thenReturnEmptyList() {
         List<User> actual = userService.getUsers();
         then(actual).isEmpty();
     }
 
     @Test
+    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void whenTableIsNotEmpty_thenReturnListOfExistingUsers() {

@@ -37,8 +37,24 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.c4-soft.springaddons:spring-security-oauth2-test-addons-jdk11:4.1.5'
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+
+    dependsOn 'startIntegrationTestDatabase'
+    finalizedBy 'stopIntegrationTestDatabase'
+}
+
+task startIntegrationTestDatabase(type: Exec, group: 'containers', description: 'Starts a database container for integration testing.') {
+    String checkCommand = '[ ! "$(docker ps -a | grep test_database)" ] && '
+    String startCommand = "docker run --rm -d -p 5433:5432 --name test_database -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=users_test_db -v ./src/main/resources/create-liquibase-changes-schema.sql:/docker-entrypoint-initdb.d/init.sql postgres:13.12-alpine"
+    executable 'sh'
+    args '-c', checkCommand + startCommand
+}
+
+task stopIntegrationTestDatabase(type: Exec, group: 'containers', description: 'Stops the database container for integration testing.') {
+    executable 'sh'
+    args '-c', 'docker stop test_database'
 }
