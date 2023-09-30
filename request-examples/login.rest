@@ -10,6 +10,17 @@ Content-Type: application/json
 }
 
 ###
+# login as updated user
+
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "email": "updated@mail.com",
+  "password": "new5pass!"
+}
+
+###
 # login as admin
 
 POST http://localhost:8080/api/login
