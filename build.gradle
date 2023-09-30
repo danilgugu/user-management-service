@@ -33,6 +33,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.liquibase:liquibase-core:4.23.2'
     implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'com.hazelcast:hazelcast-all:4.2.8'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'

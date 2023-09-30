@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static gugunava.danil.usermanagementservice.config.CachingConfig.USERS;
 import static gugunava.danil.usermanagementservice.util.StringUtil.isBlank;
 import static gugunava.danil.usermanagementservice.util.StringUtil.isNotBlank;
 
@@ -28,7 +29,7 @@ public class UserService {
     private final ConversionService conversionService;
     private final BCryptPasswordEncoder encoder;
 
-    @Cacheable("users")
+    @Cacheable(USERS)
     public List<User> getUsers() {
         return userRepository.findAll()
                 .stream()
@@ -42,7 +43,7 @@ public class UserService {
                 .orElseThrow(() -> UserNotFoundException.byId(id));
     }
 
-    @CacheEvict(cacheNames = "users", allEntries = true, condition = "!(#result instanceof T(java.lang.Exception))")
+    @CacheEvict(cacheNames = USERS, condition = "!(#result instanceof T(java.lang.Exception))", allEntries = true)
     public User createUser(CreateUserCommand command) {
         if (userRepository.existsByEmail(command.getEmail()))
             throw UserAlreadyExistsException.withEmail(command.getEmail());
@@ -78,7 +79,7 @@ public class UserService {
         return conversionService.convert(userEntity, User.class);
     }
 
-    @CacheEvict(cacheNames = "users", allEntries = true, condition = "!(#result instanceof T(gugunava.danil.usermanagementservice.exception.UserNotFoundException))")
+    @CacheEvict(cacheNames = USERS, condition = "!(#result instanceof T(gugunava.danil.usermanagementservice.exception.UserNotFoundException))", allEntries = true)
     public void deleteUser(Long id) {
         if (userRepository.existsById(id))
             userRepository.deleteById(id);
