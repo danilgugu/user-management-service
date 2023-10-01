@@ -1,14 +1,29 @@
 package gugunava.danil.usermanagementservice.service;
 
 import gugunava.danil.usermanagementservice.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
+import static gugunava.danil.usermanagementservice.config.CachingConfig.USERS;
 import static org.assertj.core.api.BDDAssertions.then;
 
 public class UserService_GetUsers_Test extends AbstractUserServiceTest {
+
+    @Autowired
+    private CacheManager cacheManager;
+
+    @BeforeEach
+    void clearCache() {
+        Cache cache = cacheManager.getCache(USERS);
+        if (cache != null)
+            cache.clear();
+    }
 
     @Test
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
