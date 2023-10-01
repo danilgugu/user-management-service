@@ -30,7 +30,7 @@ services:
     environment:
       MC_ADMIN_PASSWORD: password1
       MC_ADMIN_USER: admin
-      MC_INIT_CMD: "./bin/mc-conf.sh cluster add -H=/data -ma 192.168.0.1:5701 -cn dev"
+      MC_INIT_CMD: "./bin/mc-conf.sh cluster list | grep -q 'dev' || ./bin/mc-conf.sh cluster add -H=/data -ma 192.168.0.1:5701 -cn dev"
     ports:
       - "10080:8080"
     depends_on:
