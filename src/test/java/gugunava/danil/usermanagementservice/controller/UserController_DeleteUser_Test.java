@@ -9,6 +9,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.NestedServletException;
 
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -36,13 +38,13 @@ public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
     @Test
     @WithMockJwtAuth(authorities = "SCOPE_USER.DELETE")
-    void whenUserNotExists_thenStatusSuccess_andReturnEmptyBody() throws Exception {
+    void whenUserNotExists_thenStatusNotFound_andReturnErrorMessage() throws Exception {
         long userId = 1L;
         given(userRepository.existsById(userId)).willReturn(false);
 
         mockMvc.perform(delete(BASE_URL + userId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$.message", is("User with id 1 not found.")))
+                .andExpect(jsonPath("$.time", notNullValue()));
 
         verify(userRepository).existsById(userId);
         verify(userRepository, never()).deleteById(anyLong());
