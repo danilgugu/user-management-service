@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static gugunava.danil.usermanagementservice.config.SpringDocConfig.BEARER_AUTHENTICATION;
+
 @RequestMapping("api/users")
 public interface UserController {
 
@@ -63,7 +65,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = @SecurityRequirement(name = "Bearer")
+            security = @SecurityRequirement(name = BEARER_AUTHENTICATION)
     )
     @GetMapping("{id}")
     ResponseEntity<User> getUser(@Parameter(name = "id", description = "Identifier of desired user", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id);
@@ -83,7 +85,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
                     })
             },
-            security = @SecurityRequirement(name = "Bearer")
+            security = @SecurityRequirement(name = BEARER_AUTHENTICATION)
     )
     @PostMapping
     ResponseEntity<User> createUser(@Parameter(name = "CreateUserCommand", description = "Information about user to be created") @Valid @RequestBody CreateUserCommand command);
@@ -112,7 +114,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = @SecurityRequirement(name = "Bearer")
+            security = @SecurityRequirement(name = BEARER_AUTHENTICATION)
     )
     @PutMapping("{id}")
     ResponseEntity<User> updateUser(
@@ -143,7 +145,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = @SecurityRequirement(name = "Bearer")
+            security = @SecurityRequirement(name = BEARER_AUTHENTICATION)
     )
     @DeleteMapping("{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER.DELETE')")

@@ -27,7 +27,7 @@ public interface AuthenticationController {
     @Operation(
             operationId = "login",
             summary = "Authenticate user",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponse.class))
