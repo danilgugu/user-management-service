@@ -2,12 +2,17 @@ package gugunava.danil.usermanagementservice.controller;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import org.assertj.core.api.ThrowableAssert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.util.NestedServletException;
 
+import static gugunava.danil.usermanagementservice.config.CachingConfig.USERS;
 import static org.assertj.core.api.BDDAssertions.thenThrownBy;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -22,6 +27,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
+    @MockBean
+    private CacheManager cacheManager;
+
+    @MockBean
+    private Cache cache;
+
+    @BeforeEach
+    void setUp() {
+        given(cacheManager.getCache(USERS)).willReturn(cache);
+    }
+
     @Test
     @WithMockJwtAuth(authorities = "SCOPE_USER.DELETE")
     void whenUserExists_thenStatusSuccess_andReturnEmptyBody() throws Exception {
@@ -34,6 +50,7 @@ public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
         verify(userRepository).existsById(userId);
         verify(userRepository).deleteById(userId);
+        verify(cache).clear();
     }
 
     @Test
@@ -48,6 +65,7 @@ public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
         verify(userRepository).existsById(userId);
         verify(userRepository, never()).deleteById(anyLong());
+        verify(cache, never()).clear();
     }
 
     @Test
@@ -65,5 +83,6 @@ public class UserController_DeleteUser_Test extends AbstractUserControllerTest {
 
         verify(userRepository, never()).existsById(anyLong());
         verify(userRepository, never()).deleteById(anyLong());
+        verify(cache, never()).clear();
     }
 }

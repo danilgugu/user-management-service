@@ -1,9 +1,6 @@
 package gugunava.danil.usermanagementservice.service;
 
-import gugunava.danil.usermanagementservice.exception.UserAlreadyExistsException;
-import gugunava.danil.usermanagementservice.generator.CreateUserCommandGenerator;
-import gugunava.danil.usermanagementservice.model.CreateUserCommand;
-import gugunava.danil.usermanagementservice.model.User;
+import gugunava.danil.usermanagementservice.exception.UserNotFoundException;
 import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-public class UserService_CreateUser_Test extends AbstractUserServiceTest {
+public class UserService_DeleteUser_Test extends AbstractUserServiceTest {
 
     @MockBean
     private CacheManager cacheManager;
@@ -34,30 +31,26 @@ public class UserService_CreateUser_Test extends AbstractUserServiceTest {
 
     @Test
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void whenEmailIsAvailable_thenReturnCreatedUser() {
-        CreateUserCommand command = CreateUserCommandGenerator.valid();
+    void whenUserNotExists_thenThrowException() {
+        ThrowableAssert.ThrowingCallable getUser = () -> userService.deleteUser(-1L);
 
-        User actual = userService.createUser(command);
-
-        then(actual.getId()).isNotNull();
-        then(actual.getUserName()).isEqualTo(command.getUserName());
-        then(actual.getEmail()).isEqualTo(command.getEmail());
-        verify(cache).clear();
+        thenThrownBy(getUser)
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("User with id -1 not found.");
+        verify(cache, never()).clear();
     }
 
     @Test
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/insert_user.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Sql(scripts = "/sql/delete_users.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-    void whenEmailIsUnavailable_thenThrowException() {
-        CreateUserCommand command = CreateUserCommandGenerator.valid();
+    void whenUserExists_thenDeleteUser() {
+        long userId = -1L;
+        then(userRepository.existsById(userId)).isTrue();
 
-        ThrowableAssert.ThrowingCallable createUser = () -> userService.createUser(command);
+        userService.deleteUser(userId);
 
-        thenThrownBy(createUser)
-                .isInstanceOf(UserAlreadyExistsException.class)
-                .hasMessage("User with email 'example@mail.com' already registered.");
-        verify(cache, never()).clear();
+        then(userRepository.existsById(userId)).isFalse();
+        verify(cache).clear();
     }
 }
