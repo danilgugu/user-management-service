@@ -25,14 +25,14 @@ public interface AuthenticationController {
      * or wrong password (status code 401)
      */
     @Operation(
-            operationId = "getUsers",
-            summary = "List of all users in the system",
+            operationId = "login",
+            summary = "Authenticate user",
             tags = {"user"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponse.class))
                     }),
-                    @ApiResponse(responseCode = "401", description = "wrong password", content = {
+                    @ApiResponse(responseCode = "401", description = "wrong email or password", content = {
                             @Content(mediaType = "application/json", schema = @Schema())
                     })
             }

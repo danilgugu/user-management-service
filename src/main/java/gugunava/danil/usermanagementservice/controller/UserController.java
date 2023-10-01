@@ -26,12 +26,11 @@ public interface UserController {
      * GET /api/users : List of all users in the system
      *
      * @return successful operation (status code 200)
-     * or invalid limit (status code 400)
      */
     @Operation(
             operationId = "getUsers",
             summary = "List of all users in the system",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = User.class)))
@@ -52,7 +51,7 @@ public interface UserController {
     @Operation(
             operationId = "getUser",
             summary = "Returns details of a specific user by their ID",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
@@ -64,9 +63,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = {
-                    @SecurityRequirement(name = "Bearer")
-            }
+            security = @SecurityRequirement(name = "Bearer")
     )
     @GetMapping("{id}")
     ResponseEntity<User> getUser(@Parameter(name = "id", description = "Identifier of desired user", required = true, in = ParameterIn.PATH) @PathVariable("id") Long id);
@@ -80,15 +77,13 @@ public interface UserController {
     @Operation(
             operationId = "createUser",
             summary = "Create new user",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
                     })
             },
-            security = {
-                    @SecurityRequirement(name = "Bearer")
-            }
+            security = @SecurityRequirement(name = "Bearer")
     )
     @PostMapping
     ResponseEntity<User> createUser(@Parameter(name = "CreateUserCommand", description = "Information about user to be created") @Valid @RequestBody CreateUserCommand command);
@@ -105,7 +100,7 @@ public interface UserController {
     @Operation(
             operationId = "updateUser",
             summary = "Updates the details of a specific user",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
@@ -117,9 +112,7 @@ public interface UserController {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = {
-                    @SecurityRequirement(name = "Bearer")
-            }
+            security = @SecurityRequirement(name = "Bearer")
     )
     @PutMapping("{id}")
     ResponseEntity<User> updateUser(
@@ -133,22 +126,24 @@ public interface UserController {
      * @param id Identifier of desired user (required)
      * @return successful operation (status code 200)
      * or user not found (status code 404)
+     * or forbidden (status code 403)
      */
     @Operation(
             operationId = "deleteUser",
             summary = "Removes a user from the system",
-            tags = {"user"},
+            tags = "user",
             responses = {
                     @ApiResponse(responseCode = "200", description = "successful operation", content = {
                             @Content(mediaType = "application/json", schema = @Schema())
                     }),
                     @ApiResponse(responseCode = "404", description = "user not found", content = {
                             @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                    }),
+                    @ApiResponse(responseCode = "401", description = "forbidden", content = {
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
                     })
             },
-            security = {
-                    @SecurityRequirement(name = "Bearer")
-            }
+            security = @SecurityRequirement(name = "Bearer")
     )
     @DeleteMapping("{id}")
     @PreAuthorize("hasAuthority('SCOPE_USER.DELETE')")
