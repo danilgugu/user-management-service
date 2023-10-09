@@ -1,4 +1,4 @@
-package gugunava.danil.usermanagementservice.controller;
+package gugunava.danil.usermanagementservice.controller.authentication;
 
 import gugunava.danil.usermanagementservice.model.AuthenticationRequest;
 import gugunava.danil.usermanagementservice.model.AuthenticationResponse;

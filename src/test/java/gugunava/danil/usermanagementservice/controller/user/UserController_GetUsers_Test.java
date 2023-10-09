@@ -1,4 +1,4 @@
-package gugunava.danil.usermanagementservice.controller;
+package gugunava.danil.usermanagementservice.controller.user;
 
 import gugunava.danil.usermanagementservice.entity.UserEntity;
 import gugunava.danil.usermanagementservice.generator.UserEntityGenerator;

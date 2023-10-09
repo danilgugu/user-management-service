@@ -1,4 +1,4 @@
-package gugunava.danil.usermanagementservice.controller;
+package gugunava.danil.usermanagementservice.controller.user;
 
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import org.assertj.core.api.ThrowableAssert;

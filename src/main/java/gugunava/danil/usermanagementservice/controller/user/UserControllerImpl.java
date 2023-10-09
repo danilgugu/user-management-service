@@ -1,4 +1,4 @@
-package gugunava.danil.usermanagementservice.controller;
+package gugunava.danil.usermanagementservice.controller.user;
 
 import gugunava.danil.usermanagementservice.model.CreateUserCommand;
 import gugunava.danil.usermanagementservice.model.UpdateUserCommand;

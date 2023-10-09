@@ -9,6 +9,6 @@ create table role
 (
     id    bigint  not null primary key default nextval('role_id_seq'),
     name  varchar not null,
-    scope varchar
+    scope varchar not null
 );
 alter sequence role_id_seq owned by role.id;
