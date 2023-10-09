@@ -1,18 +1,22 @@
 package gugunava.danil.usermanagementservice.service;
 
 import gugunava.danil.usermanagementservice.entity.UserEntity;
+import gugunava.danil.usermanagementservice.entity.UserRoleEntity;
 import gugunava.danil.usermanagementservice.exception.UserAlreadyExistsException;
 import gugunava.danil.usermanagementservice.exception.UserNotFoundException;
 import gugunava.danil.usermanagementservice.model.CreateUserCommand;
 import gugunava.danil.usermanagementservice.model.UpdateUserCommand;
 import gugunava.danil.usermanagementservice.model.User;
 import gugunava.danil.usermanagementservice.repository.UserRepository;
+import gugunava.danil.usermanagementservice.repository.UserRoleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,7 +29,11 @@ import static gugunava.danil.usermanagementservice.util.StringUtil.isNotBlank;
 @RequiredArgsConstructor
 public class UserService {
 
+    @Value("${spring.liquibase.parameters.db.default.role.id}")
+    private Long defaultRoleId;
+
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
     private final ConversionService conversionService;
     private final BCryptPasswordEncoder encoder;
 
@@ -43,6 +51,7 @@ public class UserService {
                 .orElseThrow(() -> UserNotFoundException.byId(id));
     }
 
+    @Transactional
     @CacheEvict(cacheNames = USERS, condition = "!(#result instanceof T(java.lang.Exception))", allEntries = true)
     public User createUser(CreateUserCommand command) {
         if (userRepository.existsByEmail(command.getEmail()))
@@ -50,6 +59,8 @@ public class UserService {
         String password = encoder.encode(command.getPassword());
         UserEntity userEntity = UserEntity.createNew(command.getUserName(), command.getEmail(), password);
         UserEntity saved = userRepository.save(userEntity);
+        UserRoleEntity userRoleEntity = new UserRoleEntity(saved.getId(), defaultRoleId);
+        userRoleRepository.save(userRoleEntity);
         return conversionService.convert(saved, User.class);
     }
 
