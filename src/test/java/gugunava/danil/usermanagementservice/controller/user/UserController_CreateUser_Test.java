@@ -1,13 +1,16 @@
 package gugunava.danil.usermanagementservice.controller.user;
 
 import gugunava.danil.usermanagementservice.entity.UserEntity;
+import gugunava.danil.usermanagementservice.entity.UserRoleEntity;
 import gugunava.danil.usermanagementservice.generator.CreateUserCommandGenerator;
 import gugunava.danil.usermanagementservice.generator.UserEntityGenerator;
 import gugunava.danil.usermanagementservice.model.CreateUserCommand;
+import gugunava.danil.usermanagementservice.repository.UserRoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -28,8 +31,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class UserController_CreateUser_Test extends AbstractUserControllerTest {
 
+    @Value("${spring.liquibase.parameters.db.default.role.id}")
+    private Long defaultRoleId;
+
     @Autowired
     private BCryptPasswordEncoder encoder;
+
+    @MockBean
+    private UserRoleRepository userRoleRepository;
 
     @MockBean
     private CacheManager cacheManager;
@@ -43,7 +52,7 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
     }
 
     @Test
-    void whenUserIsNotRegistered_thenStatusCreated_andReturnUser() throws Exception {
+    void whenUserIsNotRegistered_thenStatusCreated_andReturnUser_andGrantDefaultRole() throws Exception {
         CreateUserCommand command = CreateUserCommandGenerator.valid();
         UserEntity expected = UserEntityGenerator.validWithRawPassword();
         given(userRepository.existsByEmail(command.getEmail())).willReturn(false);
@@ -66,6 +75,11 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
         then(actual.getUserName()).isEqualTo(expected.getUserName());
         then(actual.getEmail()).isEqualTo(expected.getEmail());
         then(encoder.matches(expected.getPassword(), actual.getPassword())).isTrue();
+        ArgumentCaptor<UserRoleEntity> userRoleEntityArgumentCaptor = ArgumentCaptor.forClass(UserRoleEntity.class);
+        verify(userRoleRepository).save(userRoleEntityArgumentCaptor.capture());
+        UserRoleEntity actualUserRole = userRoleEntityArgumentCaptor.getValue();
+        then(actualUserRole.getUserId()).isEqualTo(expected.getId());
+        then(actualUserRole.getRoleId()).isEqualTo(defaultRoleId);
         verify(cache).clear();
     }
 
@@ -83,6 +97,7 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
 
         verify(userRepository).existsByEmail(command.getEmail());
         verify(userRepository, never()).save(any());
+        verify(userRoleRepository, never()).save(any());
         verify(cache, never()).clear();
     }
 
@@ -105,6 +120,7 @@ public class UserController_CreateUser_Test extends AbstractUserControllerTest {
 
         verify(userRepository, never()).existsByEmail(anyString());
         verify(userRepository, never()).save(any());
+        verify(userRoleRepository, never()).save(any());
         verify(cache, never()).clear();
     }
 }
