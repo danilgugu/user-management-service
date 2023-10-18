@@ -58,12 +58,6 @@ error.
 
 ## Stop
 
-If you want to stop the application and save everything as it is in database, simply type `docker compose stop` in
-terminal in root of this project. After it, you can start the application again with `docker compose up -d`, this time
-it should be much faster.
-
-## Stop and remove
-
-If you want to stop the application and remove everything from the database, type `docker compose down` in terminal in
-root of this project. After it, you can start the application again with `docker compose up -d`, but all the data in
-database will be lost.
+If you want to stop the application and save everything as it is in database, simply type `docker compose down` in
+terminal in root of this project. You can quit docker and even shut down your PC and then start it again, data would not
+be lost. After it, you can start the application again with `docker compose up -d`, this time it should be much faster.
